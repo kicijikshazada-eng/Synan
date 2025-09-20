@@ -1,4 +1,4 @@
-name: Build APK
+name: Build Kivy APK
 
 on:
   push:
@@ -10,38 +10,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Repository-y barla
-      uses: actions/checkout@v4
+    - name: Repo'ny klonla
+      uses: actions/checkout@v3
 
     - name: Python gur
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
-    - name: Zerur paketleri gur
+    - name: Buildozer we Android SDK gur
       run: |
-        sudo apt-get update
-        sudo apt-get install -y git zip openjdk-17-jdk wget unzip
+        sudo apt update
+        sudo apt install -y zip unzip openjdk-11-jdk python3-pip
+        pip install --upgrade pip
+        pip install buildozer
 
-        pip install buildozer cython
-
-        mkdir -p $GITHUB_WORKSPACE/android-sdk
-        cd $GITHUB_WORKSPACE/android-sdk
+        # Android SDK we NDK gurmak
+        mkdir -p $HOME/.buildozer/android/platform
+        cd $HOME/.buildozer/android/platform
         wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
         unzip cmdline-tools.zip
         mkdir -p cmdline-tools/latest
         mv cmdline-tools/* cmdline-tools/latest/
+        export ANDROID_HOME=$HOME/.buildozer/android/platform
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
 
-        export ANDROID_HOME=$GITHUB_WORKSPACE/android-sdk
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH
+        # Lisenziýany kabul et
+        yes | sdkmanager --licenses
 
-        yes | sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+        # Zerur paketleri gur
+        sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0"
 
-    - name: APK ýasa
+    - name: APK döret
       run: |
-        export ANDROID_HOME=$GITHUB_WORKSPACE/android-sdk
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH
-        buildozer -v android debug
+        buildozer android debug
 
     - name: APK faýlyny ýükle
       uses: actions/upload-artifact@v4
