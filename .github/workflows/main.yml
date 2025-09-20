@@ -28,7 +28,10 @@ jobs:
           build-essential \
           unzip \
           zip \
-          openjdk-17-jdk
+          openjdk-17-jdk \
+          wget \
+          libffi-dev \
+          libssl-dev
 
     - name: Buildozer we Android SDK gur
       run: |
