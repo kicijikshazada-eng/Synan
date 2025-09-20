@@ -21,9 +21,9 @@ jobs:
     - name: Buildozer we Android SDK gur
       run: |
         sudo apt update
-        sudo apt install -y zip unzip openjdk-11-jdk python3-pip
+        sudo apt install -y zip unzip openjdk-11-jdk ccache python3-pip
         pip install --upgrade pip
-        pip install buildozer cython virtualenv ccache
+        pip install buildozer cython virtualenv
 
         export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
         mkdir -p $ANDROID_HOME/cmdline-tools
