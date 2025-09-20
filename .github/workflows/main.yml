@@ -47,6 +47,10 @@ jobs:
         # PATH giňelt
         export PATH=$ANDROID_HOME/platform-tools:$PATH
         export PATH=$ANDROID_HOME/build-tools/31.0.0:$PATH
+        
+        # 🔑 Buildozer köne ýoly talap edýänligi üçin symlink döredilýär
+        mkdir -p $ANDROID_HOME/tools/bin
+        ln -s $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager $ANDROID_HOME/tools/bin/sdkmanager
 
     - name: APK döret
       run: |
