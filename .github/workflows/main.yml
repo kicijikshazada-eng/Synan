@@ -26,10 +26,7 @@ jobs:
 
     - name: Build APK
       run: |
-        buildozer init
-        sed -i 's/package.name = myapp/package.name = fizrenkli/' buildozer.spec
-        sed -i 's/source.main = main.py/source.main = fizrenkli.py/' buildozer.spec
-        buildozer -v android debug
+        buildozer android debug
         ls -R .
 
     - name: Upload APK
