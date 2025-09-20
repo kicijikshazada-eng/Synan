@@ -32,7 +32,7 @@ jobs:
           wget \
           libffi-dev \
           libssl-dev
-        sudo apt-get install -y libncurses5 libsqlite3-dev m4 zlib1g-dev libbz2-dev libreadline-dev libgdbm-dev tk-dev
+        sudo apt-get install -y libncurses6 libsqlite3-dev m4 zlib1g-dev libbz2-dev libreadline-dev libgdbm-dev tk-dev
     - name: Update autotools
       run: |
         sudo apt-get install -y autopoint gettext
