@@ -27,7 +27,9 @@ jobs:
 
         export ANDROID_HOME=$HOME/.buildozer/android/platform
         mkdir -p $ANDROID_HOME/cmdline-tools/latest
-
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/tools/bin:$PATH
+        
         wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
         unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
 
