@@ -2,17 +2,21 @@ name: Build Kivy APK
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Repo klonla
       uses: actions/checkout@v4
 
+    - name: Python gur
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
     - name: Install system dependencies
       run: |
         sudo apt-get update
@@ -24,42 +28,58 @@ jobs:
           build-essential \
           unzip \
           zip \
-          openjdk-17-jdk \
-          wget
+          openjdk-17-jdk
 
-    - name: Install Android SDK tools
+    - name: Buildozer we Android SDK gur
       run: |
-        mkdir -p $HOME/android-sdk
-        cd $HOME/android-sdk
-        wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
-        unzip cmdline-tools.zip -d cmdline-tools
-        yes | cmdline-tools/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/android-sdk \
-          "platform-tools" \
-          "platforms;android-31" \
-          "build-tools;30.0.3" \
-          "build-tools;31.0.0" \
-          "build-tools;36.0.0"
-        yes | cmdline-tools/cmdline-tools/bin/sdkmanager --licenses --sdk_root=$HOME/android-sdk
-        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-        echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
-        echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
-        echo "$HOME/android-sdk/build-tools/31.0.0" >> $GITHUB_PATH
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
-    - name: Install pip dependencies
-      run: |
-        python -m pip install --upgrade pip
+        sudo apt update
+        sudo apt install -y zip unzip openjdk-11-jdk ccache python3-pip
+        pip install --upgrade pip
         pip install buildozer cython virtualenv
 
-    - name: Build APK
-      run: buildozer android debug
+        export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
+        mkdir -p $ANDROID_HOME/cmdline-tools
 
-    - name: Upload APK artifact
+        # Android cmdline-tools göçür
+        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
+
+        # Dogry ýerde aç
+        unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
+
+        # Papkany "latest" diýip atlandyr
+        mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
+
+        # PATH konfigurasiýasy
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+
+        # Lisenziýalary kabul et we zerur SDK paketlerini gur
+        yes | sdkmanager --licenses
+        sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0"
+
+        # PATH giňelt
+        export PATH=$ANDROID_HOME/platform-tools:$PATH
+        export PATH=$ANDROID_HOME/build-tools/31.0.0:$PATH
+        
+        # 🔑 Buildozer köne ýoly talap edýänligi üçin symlink döredilýär
+        mkdir -p $ANDROID_HOME/tools/bin
+        ln -s $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager $ANDROID_HOME/tools/bin/sdkmanager
+
+    - name: APK döret
+      run: |
+        export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
+        export PATH=$ANDROID_HOME/platform-tools:$PATH
+        export PATH=$ANDROID_HOME/build-tools/31.0.0:$PATH
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+
+        buildozer android debug
+
+    - name: APK faýlynyň ýerleşýän ýerini görkez
+      run: |
+        echo "Döreden APK faýly:"
+        ls -lh bin/
+
+    - name: APK faýlyny artefakt hökmünde çykarmak
       uses: actions/upload-artifact@v4
       with:
-        name: fizrenkli-apk
+        name: kivy-app-apk
         path: bin/*.apk
