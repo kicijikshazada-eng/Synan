@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Repo'ny klonla
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Python gur
       uses: actions/setup-python@v4
@@ -55,7 +55,7 @@ jobs:
         ls -lh bin/
 
     - name: APK faýlyny artefakt hökmünde çykarmak
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: kivy-app-apk
         path: bin/*.apk
