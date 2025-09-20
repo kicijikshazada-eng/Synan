@@ -25,6 +25,18 @@ jobs:
         pip install --upgrade pip
         pip install buildozer
 
+        export ANDROID_HOME=$HOME/.buildozer/android/platform
+        mkdir -p $ANDROID_HOME/cmdline-tools/latest
+
+        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
+        unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
+
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/tools/bin:$PATH
+
+        yes | sdkmanager --licenses
+        sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0"
+
         # SDK üçin katalog döret
         export ANDROID_HOME=$HOME/.buildozer/android/platform
         mkdir -p $ANDROID_HOME/cmdline-tools/latest
@@ -46,6 +58,8 @@ jobs:
       run: |
         export ANDROID_HOME=$HOME/.buildozer/android/platform
         export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/tools/bin:$PATH
+
         buildozer android debug
 
     - name: APK faýlynyň ýerleşýän ýerini görkez
