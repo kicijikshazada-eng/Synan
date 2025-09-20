@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Repo'ny klonla
+    - name: Repo klonla
       uses: actions/checkout@v4
 
     - name: Python gur
@@ -23,44 +23,37 @@ jobs:
         sudo apt update
         sudo apt install -y zip unzip openjdk-11-jdk python3-pip
         pip install --upgrade pip
-        pip install buildozer
+        pip install buildozer cython virtualenv ccache
 
-        export ANDROID_HOME=$HOME/.buildozer/android/platform
-        mkdir -p $ANDROID_HOME/cmdline-tools/latest
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/tools/bin:$PATH
-        
+        export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
+        mkdir -p $ANDROID_HOME/cmdline-tools
+
+        # Android cmdline-tools göçür
         wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
-        unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
 
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/tools/bin:$PATH
+        # Dogry ýerde aç
+        unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
 
-        yes | sdkmanager --licenses
-        sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0"
-
-        # SDK üçin katalog döret
-        export ANDROID_HOME=$HOME/.buildozer/android/platform
-        mkdir -p $ANDROID_HOME/cmdline-tools/latest
-
-        # Command-line tools göçür we göni aç
-        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
-        unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools/latest
+        # Papkany "latest" diýip atlandyr
+        mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
 
         # PATH konfigurasiýasy
         export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
 
-        # Lisenziýany kabul et
+        # Lisenziýalary kabul et we zerur SDK paketlerini gur
         yes | sdkmanager --licenses
-
-        # Zerur SDK paketlerini gur
         sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0"
+
+        # PATH giňelt
+        export PATH=$ANDROID_HOME/platform-tools:$PATH
+        export PATH=$ANDROID_HOME/build-tools/31.0.0:$PATH
 
     - name: APK döret
       run: |
-        export ANDROID_HOME=$HOME/.buildozer/android/platform
+        export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
+        export PATH=$ANDROID_HOME/platform-tools:$PATH
+        export PATH=$ANDROID_HOME/build-tools/31.0.0:$PATH
         export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/tools/bin:$PATH
 
         buildozer android debug
 
