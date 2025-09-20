@@ -9,40 +9,41 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      ANDROID_HOME: ${{ github.workspace }}/android-sdk
-      PATH: ${{ github.workspace }}/android-sdk/cmdline-tools/latest/bin:${{ github.workspace }}/android-sdk/platform-tools:${{ github.workspace }}/android-sdk/emulator:${{ env.PATH }}
-
     steps:
-    - name: Checkout repository
+    - name: Repository-y barla
       uses: actions/checkout@v4
 
-    - name: Set up Python
+    - name: Python gur
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
-    - name: Install dependencies
+    - name: Zerur paketleri gur
       run: |
         sudo apt-get update
         sudo apt-get install -y git zip openjdk-17-jdk wget unzip
 
         pip install buildozer cython
 
-        mkdir -p $ANDROID_HOME
-        cd $ANDROID_HOME
+        mkdir -p $GITHUB_WORKSPACE/android-sdk
+        cd $GITHUB_WORKSPACE/android-sdk
         wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
         unzip cmdline-tools.zip
         mkdir -p cmdline-tools/latest
         mv cmdline-tools/* cmdline-tools/latest/
 
+        export ANDROID_HOME=$GITHUB_WORKSPACE/android-sdk
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH
+
         yes | sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
-    - name: Build APK
+    - name: APK ýasa
       run: |
+        export ANDROID_HOME=$GITHUB_WORKSPACE/android-sdk
+        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH
         buildozer -v android debug
 
-    - name: Upload APK
+    - name: APK faýlyny ýükle
       uses: actions/upload-artifact@v4
       with:
         name: fizrenkli-apk
