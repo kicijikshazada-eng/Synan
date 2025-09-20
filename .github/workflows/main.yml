@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
     - name: Repo klonla
@@ -32,6 +32,10 @@ jobs:
           wget \
           libffi-dev \
           libssl-dev
+    - name: Update autotools
+      run: |
+        sudo apt-get install -y autopoint gettext
+        sudo apt-get install -y autoconf-archive
 
     - name: Buildozer we Android SDK gur
       run: |
