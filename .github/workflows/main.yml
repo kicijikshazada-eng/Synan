@@ -38,6 +38,12 @@ jobs:
         sudo apt-get install -y autopoint gettext
         sudo apt-get install -y autoconf-archive
 
+    - name: Autoconf konfigurasiýasy
+      run: |
+        libtoolize --force
+        autoreconf --install
+        autoupdate
+
     - name: Buildozer we Android SDK gur
       run: |
         sudo apt update
