@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-24.04 
 
     steps:
     - name: Repo klonla
@@ -17,44 +17,11 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-       - name: Buildozer we Android SDK gur
-      run: |
-        sudo apt update
-        sudo apt install -y zip unzip openjdk-11-jdk python3-pip
-        pip install --upgrade pip
-        pip install buildozer cython virtualenv
-
-        export ANDROID_HOME=$HOME/.buildozer/android/platform/android-sdk
-        mkdir -p $ANDROID_HOME/cmdline-tools
-
-        # Android cmdline-tools göçür
-        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
-
-        # Dogry ýerde aç
-        unzip cmdline-tools.zip -d $ANDROID_HOME/cmdline-tools
-
-        # Papkany "latest" diýip atlandyr
-        mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
-
-        # PATH konfigurasiýasy
-        export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
-
-        # Lisenziýalary kabul et we zerur SDK paketlerini gur
-        yes | sdkmanager --licenses
-        sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0"
-
-        # PATH giňelt
-        export PATH=$ANDROID_HOME/platform-tools:$PATH
-        export PATH=$ANDROID_HOME/build-tools/31.0.0:$PATH
-        
-        # 🔑 Buildozer köne ýoly talap edýänligi üçin symlink döredilýär
-        mkdir -p $ANDROID_HOME/tools/bin
-        ln -s $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager $ANDROID_HOME/tools/bin/sdkmanager
 
     - name: Buildozer we Android SDK gur
       run: |
         sudo apt update
-        sudo apt install -y zip unzip openjdk-11-jdk ccache python3-pip
+        sudo apt install -y zip unzip openjdk-11-jdk python3-pip
         pip install --upgrade pip
         pip install buildozer cython virtualenv
 
