@@ -18,6 +18,10 @@ jobs:
       with:
         python-version: '3.10'
 
+    - name: Buildozer cache arassala
+      run: |
+        rm -rf ~/.buildozer
+
     - name: Zerur C/C++ we beýleki kitaphanalary gur
       run: |
         sudo apt-get update
