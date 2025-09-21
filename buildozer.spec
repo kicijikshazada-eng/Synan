@@ -33,7 +33,7 @@ android.minapi = 21
 
 # SDK / NDK
 android.sdk = 31
-android.ndk = 25b
+android.ndk = 21e
 
 # Arhitekturalar
 android.archs = arm64-v8a,armeabi-v7a
