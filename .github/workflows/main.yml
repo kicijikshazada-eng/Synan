@@ -27,8 +27,8 @@ jobs:
         rm -rf ~/.buildozer
     - name: Python paketlerini gur
       run: |
-        python -m pip install --upgrade pip setuptools wheel virtualenv
-        pip install --upgrade buildozer cython python-for-android
+        python -m pip install --upgrade pip setuptools wheel virtualenv 
+        pip install --upgrade buildozer cython python-for-android pyjnius
 
     - name: Android SDK we Buildozer konfigurasiýasy
       run: |
