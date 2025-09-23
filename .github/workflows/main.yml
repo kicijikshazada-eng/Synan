@@ -25,11 +25,12 @@ jobs:
     - name: Buildozer cache arassala
       run: |
         rm -rf ~/.buildozer
-    - name: Python paketlerini gur
+    - name: Install Python packages
       run: |
-        python -m pip install --upgrade pip setuptools wheel virtualenv 
-        pip install --upgrade buildozer cython python-for-android
+        python -m pip install --upgrade pip setuptools wheel virtualenv cython
+        pip install git+https://github.com/kivy/python-for-android.git
         pip install git+https://github.com/kivy/pyjnius.git
+        pip install --upgrade buildozer
       # find $VIRTUAL_ENV -type f \( -name "*.py" -o -name "*.pyx" \) -exec sed -i 's/long/int/g' {} +
       # pip install --upgrade --force-reinstall --no-binary :all: jnius
         
