@@ -10,8 +10,8 @@ source.main = fizrenkli.py
 version = 0.1
 
 # Talap edilýän kitaphanalar 
-requirements = python3,kivy,pyjnius@https://github.com/kivy/pyjnius/archive/master.zip
-
+# requirements = python3,kivy,pyjnius@https://github.com/kivy/pyjnius/archive/master.zip
+requirements = python3,kivy,pyjnius,requests,certifi,openssl
 orientation = portrait
 fullscreen = 1
 
@@ -36,7 +36,8 @@ android.sdk = 31
 android.ndk = 21e
 
 # Arhitekturalar
-android.archs = arm64-v8a,armeabi-v7a
+# android.archs = arm64-v8a,armeabi-v7a
+android.archs = armeabi-v7a
 
 # SDL2 boýunça täze gurluş
 android.bootstrap = sdl2
