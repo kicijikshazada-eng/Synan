@@ -9,8 +9,8 @@ source.main = fizrenkli.py
 
 version = 0.1
 
-# Talap edilýän kitaphanalar
-requirements = python3,kivy,pyjnius
+# Talap edilýän kitaphanalar 
+requirements = python3,kivy,git+https://github.com/kivy/pyjnius.git
 
 orientation = portrait
 fullscreen = 1
